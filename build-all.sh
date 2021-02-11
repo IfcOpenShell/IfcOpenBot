@@ -1,5 +1,7 @@
 source ./secrets.sh
 
+mkdir -p logs output uploaded
+
 sha=$(./sync.sh)
 now=$(date +%Y-%m-%d_%H.%M.%S)
 
