@@ -1,0 +1,37 @@
+- name: main playbook
+  hosts: localhost
+  tasks:
+    - add_host:
+        name: '{{ ip }}'
+        group: dynamic
+        ansible_user: Administrator
+        ansible_password: '{{ pass }}'
+        ansible_connection: winrm
+        ansible_winrm_server_cert_validation: ignore
+        ansible_winrm_read_timeout_sec: 600
+        
+- hosts: dynamic
+  tasks:
+  
+    - name: build
+      script: build.bat
+      
+    - name: collect output
+      script:
+        cmd: collect.sh {{ sha }} {{ branch }}
+        executable: '"C:\Program Files\Git\bin\bash.exe"'
+        
+    - name: bundle output
+      win_command: 7z a bundle.zip *.zip
+      args:
+        chdir: C:\Users\Administrator\output
+        creates: bundle.zip
+        
+    - name: fetch output
+      fetch:
+        src: '"C:\Users\Administrator\output\bundle.zip"'
+        dest: output/
+        flat: yes
+        
+        
+
