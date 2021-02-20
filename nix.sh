@@ -170,8 +170,9 @@ done
 
 ' $2 $3 | $SSH
 
-mkdir -p output
-scp -i ${KEY_FILE}.pem $SSH_HOST:~/output/*.zip output/
+outputdir=output$(basename -- "$5")
+mkdir -p "$outputdir"
+scp -i ${KEY_FILE}.pem $SSH_HOST:~/output/*.zip "$outputdir"/
 
 sleep 60
 
