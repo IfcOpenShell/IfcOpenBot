@@ -74,7 +74,7 @@ sleep 60
 
 ansible-playbook win.yaml --extra-vars "ip=${IP} pass=${PASS} sha=$1 branch=$2" -vvv
 
-unzip output/bundle.zip -d output
+unzip -o output/bundle.zip -d output
 rm output/bundle.zip
 
 sleep 60
