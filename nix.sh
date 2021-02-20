@@ -92,7 +92,7 @@ branch=%s
 export CXXFLAGS="-O3"
 export CFLAGS="-O3"
 cd ~
-[ -d IfcOpenShell ] || git clone https://github.com/IfcOpenShell/IfcOpenShell
+[ -d IfcOpenShell ] || git clone https://github.com/IfcOpenShell/IfcOpenShell --recursive
 cd IfcOpenShell/nix
 
 git reset --hard
