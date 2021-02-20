@@ -7,7 +7,8 @@ ARCH = ["x86", "x64"]
 ARCH2 = ["x86", "amd64"]
 
 for b, a, p in zip(BIT, ARCH, ARCH2):
-    
+
+    print(fr"set VS_HOST=x64")
     print(fr"cd %USERPROFILE%")
     print(fr"git clone https://github.com/IfcOpenShell/IfcOpenShell IfcOpenShell_{b}")
     print(fr"cd IfcOpenShell_{b}\win")
