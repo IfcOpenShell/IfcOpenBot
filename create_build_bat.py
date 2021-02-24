@@ -10,7 +10,9 @@ for b, a, p in zip(BIT, ARCH, ARCH2):
 
     print(fr"set VS_HOST=x64")
     print(fr"cd %USERPROFILE%")
-    print(fr"git clone --recursive https://github.com/IfcOpenShell/IfcOpenShell IfcOpenShell_{b}")
+    print(fr"if not exists IfcOpenShell_{b} (")
+    print(fr"  git clone --recursive https://github.com/IfcOpenShell/IfcOpenShell IfcOpenShell_{b}")
+    print(fr")")
     print(fr"cd IfcOpenShell_{b}\win")
     print(fr"git checkout {SHA}")
     print(fr'call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvars32.bat" {p}')

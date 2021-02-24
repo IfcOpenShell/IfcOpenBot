@@ -67,15 +67,22 @@ if [ $rc -eq 0 ]; then
 fi
 done
 
+[ -f output/bundle.zip ] &&  rm output/bundle.zip
+
 python3 create_build_bat.py $1 > build.bat
 
 # @todo is this still necessary? the winrm timeout has been increased
 sleep 60
 
-ansible-playbook win.yaml --extra-vars "ip=${IP} pass=${PASS} sha=$1 branch=$2" -vvv
+while :
+do
+ansible-playbook win.yaml --extra-vars "ip=${IP} pass=${PASS} sha=$1 branch=$2" -vvv | true
+if [ -f output/bundle.zip ]; then
+    break
+fi
+done
 
 unzip -o output/bundle.zip -d output
-rm output/bundle.zip
 
 sleep 60
 
