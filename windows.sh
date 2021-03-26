@@ -5,7 +5,7 @@ if [ -z "$3" ]; then
 INSTANCE_ID=$(aws ec2 run-instances \
 	--region us-east-2 \
 	--image-id ${WINDOWS_AMI} \
-	--instance-type t2.medium \
+	--instance-type t3.medium \
 	--security-group-ids ${WINDOWS_SGROUP} \
 	--key-name ${KEY_FILE} \
 	--user-data file://windows_init.txt \
@@ -22,7 +22,7 @@ aws ec2 stop-instances --instance-ids "$INSTANCE_ID"
 aws ec2 wait instance-stopped --instance-ids "$INSTANCE_ID"
 aws ec2 modify-instance-attribute \
 	--instance-id "$INSTANCE_ID" \
-        --instance-type "{\"Value\":\"t2.2xlarge\"}"
+        --instance-type "{\"Value\":\"t3.2xlarge\"}"
 aws ec2 start-instances --instance-ids "$INSTANCE_ID"
 
 else
@@ -76,7 +76,7 @@ sleep 60
 
 while :
 do
-ansible-playbook win.yaml --extra-vars "ip=${IP} pass=${PASS} sha=$1 branch=$2" -vvv | true
+ansible-playbook win.yaml --extra-vars "ip=${IP} pass=${PASS} sha=$1 branch=$2" -vvv || true
 if [ -f output/bundle.zip ]; then
     break
 fi

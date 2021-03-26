@@ -10,7 +10,7 @@ for b, a, p in zip(BIT, ARCH, ARCH2):
 
     print(fr"set VS_HOST=x64")
     print(fr"cd %USERPROFILE%")
-    print(fr"if not exists IfcOpenShell_{b} (")
+    print(fr"if not exist IfcOpenShell_{b} (")
     print(fr"  git clone --recursive https://github.com/IfcOpenShell/IfcOpenShell IfcOpenShell_{b}")
     print(fr")")
     print(fr"cd IfcOpenShell_{b}\win")

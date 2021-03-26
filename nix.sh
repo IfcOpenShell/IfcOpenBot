@@ -16,7 +16,7 @@ if [ -z "$4" ]; then
 INSTANCE_ID=$(aws ec2 run-instances \
 	--region us-east-2 \
 	--image-id ${LINUX_AMI} \
-	--instance-type t2.2xlarge \
+	--instance-type t3.2xlarge \
 	--security-group-ids ${LINUX_SGROUP} \
 	--key-name ${KEY_FILE} \
 	--block-device-mapping DeviceName=/dev/sda1,Ebs={VolumeSize=100} \
