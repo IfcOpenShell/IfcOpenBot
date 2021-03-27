@@ -51,11 +51,11 @@ def table(filepairs):
     pkgs, oses, bits = (list(map(fn, tups)) for fn in (getpkg, getos(incl_bit=False), getbit))
     rows, cols = (sorted(set(li)) for li in (pkgs, oses))
     cells = [[" "] + cols, ["---"] * (len(cols) + 1)] + [([r] + [" "] * len(cols)) for r in rows]
-    for (fn, url), r, c, b in zip(filepairs, pkgs, oses, sorted(bits)):
-        t = "[{bit}bit]({url})".format(bit=b, url=url)
+    for (fn, url), r, c, b in zip(filepairs, pkgs, oses, bits):
+        val = ["[{bit}bit]({url})".format(bit=b, url=url)]
         if len(cells[rows.index(r) + 2][cols.index(c) + 1]) > 1:
-            t = " / " + t
-        cells[rows.index(r) + 2][cols.index(c) + 1] += t
+            val.append( cells[rows.index(r) + 2][cols.index(c) + 1] )
+        cells[rows.index(r) + 2][cols.index(c) + 1] = " / ".join(sorted(val))
     return "\n".join(map(lambda row: "|{}|".format("|".join(cs for cs in row)), cells))
     
 def getdicts(filepairs):
