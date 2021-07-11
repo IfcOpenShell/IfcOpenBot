@@ -2,7 +2,7 @@ set -ex
 
 if ! [[ "$1" =~ ^(32|64|osx)$ ]]; then exit 1 ; fi
 if [ ${#2} -ne 40 ]; then exit 1; fi
-if ! [[ "$3" =~ ^v0.6.0$ ]]; then exit 1 ; fi
+# if ! [[ "$3" =~ ^v0.6.0$ ]]; then exit 1 ; fi
 
 if [ $1 == osx ]; then
 

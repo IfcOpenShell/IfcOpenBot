@@ -3,8 +3,8 @@ dir=tmp_`date +%Y%m%d`
 cd $dir
 # git pull https://github.com/IfcOpenShell/IfcOpenShell master
 # git push
-git checkout v0.6.0 &> /dev/null
-git pull https://github.com/IfcOpenShell/IfcOpenShell v0.6.0 &> /dev/null
+git checkout ${branch:-v0.6.0} &> /dev/null
+git pull https://github.com/IfcOpenShell/IfcOpenShell ${branch:-v0.6.0} &> /dev/null
 git push &> /dev/null
 git rev-parse HEAD
 cd ..

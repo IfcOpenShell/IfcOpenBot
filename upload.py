@@ -96,7 +96,7 @@ def main(sha):
     jsn = io.BytesIO()
     jsn.write(json.dumps(getdicts(filepairs)).encode('ascii'))
     jsn.seek(0)
-    branch_name = "v0.6.0"
+    branch_name = os.environ.get("branch", "v0.6.0")
     s3.upload_fileobj(jsn, os.environ.get('AWS_UPLOAD_BUCKET'), "{}.json".format(branch_name))
 
 if __name__ == "__main__":
