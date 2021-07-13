@@ -62,7 +62,7 @@ sudo apt-get update && sudo apt-get install -y gcc g++
 fi
 
 # binaries
-sudo apt-get install -y git autoconf bison make zip `cmake apt-cache search --names-only 'python2?-minimal' | awk '{print \$1}'`
+sudo apt-get install -y git autoconf bison make zip cmake \`apt-cache search --names-only 'python2?-minimal' | awk '{print \$1}'\`
 
 # ifcopenshell dependencies
 sudo apt-get install -y libc6-dev\${arch} libfreetype6-dev\${arch} mesa-common-dev\${arch} libffi-dev\${arch} libfontconfig1-dev\${arch}
@@ -100,7 +100,7 @@ git reset --hard
 git fetch
 git checkout $COMMIT_SHA
 
-BUILD_CFG=Release CFLAGS="-O3" CXXFLAGS="-O3" '${TARGET_ARCH}' python build-all.py
+BUILD_CFG=Release CFLAGS="-O3" CXXFLAGS="-O3" '${TARGET_ARCH}' python2 build-all.py
 
 ' $2 $3 | $SSH
 
