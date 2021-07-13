@@ -62,7 +62,7 @@ sudo apt-get update && sudo apt-get install -y gcc g++
 fi
 
 # binaries
-sudo apt-get install -y git autoconf bison make zip cmake python-minimal
+sudo apt-get install -y git autoconf bison make zip `cmake apt-cache search --names-only 'python2?-minimal' | awk '{print \$1}'`
 
 # ifcopenshell dependencies
 sudo apt-get install -y libc6-dev\${arch} libfreetype6-dev\${arch} mesa-common-dev\${arch} libffi-dev\${arch} libfontconfig1-dev\${arch}
