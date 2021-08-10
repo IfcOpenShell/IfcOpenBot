@@ -66,6 +66,9 @@ sudo apt-get install -y git autoconf bison make zip cmake \`apt-cache search --n
 
 # ifcopenshell dependencies
 sudo apt-get install -y libc6-dev\${arch} libfreetype6-dev\${arch} mesa-common-dev\${arch} libffi-dev\${arch} libfontconfig1-dev\${arch}
+if [ \"$3\" == \"v0.7.0\" ]; then
+sudo apt-get install -y libcgal-dev\${arch}
+fi
 
 # python dependencies
 sudo apt-get install -y libsqlite3-dev\${arch} libbz2-dev\${arch} zlib1g-dev\${arch} libssl-dev\${arch} liblzma-dev\${arch}
