@@ -1,6 +1,8 @@
 import sys
 
 SHA = sys.argv[1]
+BRANCH = sys.argv[2]
+
 PYV = ["2.7.16", "3.2.5", "3.3.5", "3.4.4", "3.5.4", "3.6.8", "3.7.9", "3.8.6", "3.9.1"]
 BIT = ["32", "64"]
 ARCH = ["x86", "x64"]
@@ -11,7 +13,7 @@ for b, a, p in zip(BIT, ARCH, ARCH2):
     print(fr"set VS_HOST=x64")
     print(fr"cd %USERPROFILE%")
     print(fr"if not exist IfcOpenShell_{b} (")
-    print(fr"  git clone --recursive https://github.com/IfcOpenShell/IfcOpenShell IfcOpenShell_{b}")
+    print(fr"  git clone --recursive https://github.com/IfcOpenShell/IfcOpenShell IfcOpenShell_{b} --branch {BRANCH}")
     print(fr")")
     print(fr"cd IfcOpenShell_{b}\win")
     print(fr"git checkout {SHA}")

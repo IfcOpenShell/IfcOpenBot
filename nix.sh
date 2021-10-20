@@ -2,9 +2,14 @@ set -ex
 
 if ! [[ "$1" =~ ^(32|64|osx)$ ]]; then exit 1 ; fi
 if [ ${#2} -ne 40 ]; then exit 1; fi
-# if ! [[ "$3" =~ ^v0.6.0$ ]]; then exit 1 ; fi
+if ! [[ "$3" =~ ^v0.(6|7).0$ ]]; then exit 1 ; fi
 
 if [ $1 == osx ]; then
+
+# necessary for the zlib compilation in hdf5 apparently
+if [ "$3" == "v0.7.0" ]; then
+DARWIN_C_SOURCE=-D_DARWIN_C_SOURCE
+fi
 
 SSH_HOST=${OSX_SSH_HOST}
 SSH="ssh -o StrictHostKeyChecking=no -i ${KEY_FILE}.pem ${SSH_HOST} /bin/bash --login"
@@ -20,7 +25,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
 	--security-group-ids ${LINUX_SGROUP} \
 	--key-name ${KEY_FILE} \
 	--block-device-mapping DeviceName=/dev/sda1,Ebs={VolumeSize=100} \
-	--tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=IfcOpenBot-linux$1}]" \
+	--tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=IfcOpenBot-linux-$1bit-$3-${2:0:7}}]" \
 	\
 	| jq --raw-output .Instances[].InstanceId)
 
@@ -62,13 +67,10 @@ sudo apt-get update && sudo apt-get install -y gcc g++
 fi
 
 # binaries
-sudo apt-get install -y git autoconf bison make zip cmake \`apt-cache search --names-only 'python2?-minimal' | awk '{print \$1}'\`
+sudo apt-get install -y git autoconf bison make zip cmake python3
 
 # ifcopenshell dependencies
 sudo apt-get install -y libc6-dev\${arch} libfreetype6-dev\${arch} mesa-common-dev\${arch} libffi-dev\${arch} libfontconfig1-dev\${arch}
-if [ \"$3\" == \"v0.7.0\" ]; then
-sudo apt-get install -y libcgal-dev\${arch}
-fi
 
 # python dependencies
 sudo apt-get install -y libsqlite3-dev\${arch} libbz2-dev\${arch} zlib1g-dev\${arch} libssl-dev\${arch} liblzma-dev\${arch}
@@ -86,24 +88,31 @@ fi
 
 [ "$1" == "32" ] && TARGET_ARCH=TARGET_ARCH=i686
 
+# -m trace -t --ignore-dir=$(python3 -c "import sys; print '"'"':'"'"'.join(sys.path)[1:]")
+
 printf '
 set -ex
 
 COMMIT_SHA=%s
 branch=%s
 
+rootdir=IfcOpenShell
+if [ "$branch" == "v0.7.0" ]; then
+rootdir=IfcOpenShell_$branch
+fi
+
 export CXXFLAGS="-O3"
 export CFLAGS="-O3"
 cd ~
-[ -d IfcOpenShell ] || git clone https://github.com/IfcOpenShell/IfcOpenShell --recursive
-cd IfcOpenShell/nix
+[ -d $rootdir ] || git clone https://github.com/IfcOpenShell/IfcOpenShell $rootdir --branch $branch --recursive
+cd $rootdir/nix
 
 git reset --hard
 [ -f ~/patch.patch ] && git apply ~/patch.patch
 git fetch
 git checkout $COMMIT_SHA
 
-BUILD_CFG=Release CFLAGS="-O3" CXXFLAGS="-O3" '${TARGET_ARCH}' python2 build-all.py
+BUILD_CFG=Release CFLAGS="-O3 '${DARWIN_C_SOURCE}'" CXXFLAGS="-O3" '${TARGET_ARCH}' python3 build-all.py
 
 ' $2 $3 | $SSH
 
@@ -112,6 +121,11 @@ set -ex
 
 SHA=%s
 branch=%s
+
+rootdir=IfcOpenShell
+if [ "$branch" == "v0.7.0" ]; then
+rootdir=IfcOpenShell_$branch
+fi
 
 [ -d ~/output ] && rm -rf ~/output
 mkdir ~/output
@@ -123,7 +137,7 @@ test "`uname`" = "Darwin" && OS=macos
 test "`uname`" = "Darwin" && BIT=64
 test "`uname`" = "Darwin" && OSX_PLATFORM=10.9/
 
-cd ~/IfcOpenShell/build/`uname`/*/${OSX_PLATFORM}install/ifcopenshell
+cd ~/$rootdir/build/`uname`/*/${OSX_PLATFORM}install/ifcopenshell
 
 ls -d python-* | while read py_version; do
     postfix=`echo ${py_version: -1} | sed s/[0-9]//`
@@ -161,7 +175,7 @@ py_version_major=python-${numbers:0:2}$postfix
 [ -d blender ] && rm -rf blender
 mkdir blender
 cd blender
-cp -R ~/IfcOpenShell/src/ifcblender/io_import_scene_ifc .
+cp -R ~/$rootdir/src/ifcblender/io_import_scene_ifc .
 cp -R ../$py_version/ifcopenshell io_import_scene_ifc
 rm *.zip || true
 zip -r -qq ifcblender-${py_version_major}-${branch}-${SHA:0:7}-${OS}${BIT}.zip io_import_scene_ifc

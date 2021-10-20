@@ -10,7 +10,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
 	--key-name ${KEY_FILE} \
 	--user-data file://windows_init.txt \
 	--block-device-mapping DeviceName=/dev/sda1,Ebs={VolumeSize=200} \
-	--tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=IfcOpenBot-windows}]' \
+	--tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=IfcOpenBot-windows-$2-${1:0:7}}]" \
 	\
 	| jq --raw-output .Instances[].InstanceId)
 
@@ -69,7 +69,7 @@ done
 
 [ -f output/bundle.zip ] &&  rm output/bundle.zip
 
-python3 create_build_bat.py $1 > build.bat
+python3 create_build_bat.py $1 $2 > build.bat
 
 # @todo is this still necessary? the winrm timeout has been increased
 sleep 60
