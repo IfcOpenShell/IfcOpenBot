@@ -1,4 +1,19 @@
-for v in ["2.7.16", "3.2.5", "3.3.5", "3.4.4", "3.5.4", "3.6.8", "3.7.9", "3.8.6", "3.9.1"]:
+print("""<powershell>
+
+iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
+choco install -y git sed 7zip.install
+choco install -y cmake.install --installargs '"ADD_CMAKE_TO_PATH=System"'
+choco install visualstudio2017buildtools -y --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive"
+
+$url = "https://raw.githubusercontent.com/ansible/ansible/devel/examples/scripts/ConfigureRemotingForAnsible.ps1"
+$file = "$env:temp\ConfigureRemotingForAnsible.ps1"
+
+(New-Object -TypeName System.Net.WebClient).DownloadFile($url, $file)
+
+powershell.exe -ExecutionPolicy ByPass -File $file
+""")
+
+for v in ["3.6.8", "3.7.9", "3.8.6", "3.9.1"]:
 
     for bit in ["32", "64"]:
         if v < "3.5":
@@ -23,3 +38,7 @@ Start-Sleep -Seconds 15
 Start-Process -Wait -FilePath $path -ArgumentList /quiet, InstallAllUsers=0, PrependPath=0, Include_test=0, TargetDir=C:\Python\%(bit)s\%(v)s
 Start-Sleep -Seconds 45
 """ % locals())
+
+print("""
+</powershell>
+""")

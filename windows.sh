@@ -2,6 +2,8 @@ set -ex
 
 if [ -z "$3" ]; then
 
+python3 create_install_windows.py > windows_init.txt
+
 INSTANCE_ID=$(aws ec2 run-instances \
 	--region us-east-2 \
 	--image-id ${WINDOWS_AMI} \
