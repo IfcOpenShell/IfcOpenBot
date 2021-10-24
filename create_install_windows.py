@@ -13,10 +13,10 @@ $file = "$env:temp\ConfigureRemotingForAnsible.ps1"
 powershell.exe -ExecutionPolicy ByPass -File $file
 """)
 
-for v in ["3.6.8", "3.7.9", "3.8.6", "3.9.1"]:
+for v in ["3.6.8", "3.7.9", "3.8.6", "3.9.1", "3.10.0"]:
 
     for bit in ["32", "64"]:
-        if v < "3.5":
+        if tuple(map(int, v.split("."))) < (3,5):
             pf = ".amd64" if bit == "64" else ""
             print(r"""
 $file = "python-%(v)s%(pf)s.msi"
