@@ -66,6 +66,12 @@ else
 sudo apt-get update && sudo apt-get install -y gcc g++
 fi
 
+# cert stuff (lets encrypt cert for occt?)
+sudo apt-get update
+sudo apt-get upgrade -y
+sudo apt-get install -y --reinstall ca-certificates
+sudo update-ca-certificates
+
 # binaries
 sudo apt-get install -y git autoconf bison make zip cmake python3
 
