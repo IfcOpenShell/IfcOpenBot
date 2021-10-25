@@ -23,7 +23,7 @@ for b, a, p in zip(BIT, ARCH, ARCH2):
     
     for py in PYV:
     
-        py2 = py.replace(".", "")[0:2]
+        py2 = "".join(py.split(".")[0:2])
     
         print(fr"set PYTHONHOME=C:\Python\{b}\{py}")
         print(fr"set PY_VER_MAJOR_MINOR={py2}")
