@@ -57,14 +57,13 @@ echo "Administrator"
 
 while :
 do
-ansible all \
+(ansible all \
 	--inventory=${IP}, \
 	--extra-vars "ansible_user=Administrator ansible_password=${PASS} ansible_connection=winrm ansible_winrm_server_cert_validation=ignore" \
-	-m win_ping
+	-m win_ping && touch success_${INSTANCE_ID}) || true
 
-rc=$?
-echo rc $rc
-if [ $rc -eq 0 ]; then
+if [ -f success_${INSTANCE_ID} ]; then
+    rm success_${INSTANCE_ID}
     break
 fi
 done
