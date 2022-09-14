@@ -11,7 +11,7 @@ INSTANCE_ID=$(aws ec2 run-instances \
 	--security-group-ids ${WINDOWS_SGROUP} \
 	--key-name ${KEY_FILE} \
 	--user-data file://windows_init.txt \
-	--block-device-mapping DeviceName=/dev/sda1,Ebs={VolumeSize=200} \
+	--block-device-mapping DeviceName=/dev/sda1,Ebs={VolumeSize=400} \
 	--tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=IfcOpenBot-windows-$2-${1:0:7}}]" \
 	\
 	| jq --raw-output .Instances[].InstanceId)
