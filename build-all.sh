@@ -15,6 +15,8 @@ fi
 
 ./nix.sh osx ${sha} ${branch:-v0.6.0} &> logs/${branch:-v0.6.0}_${sha:0:7}_osx_${now}.log &
 
+ARCH=m1 ./nix.sh osx ${sha} ${branch:-v0.6.0} &> logs/${branch:-v0.6.0}_${sha:0:7}_osx_m1_${now}.log &
+
 ./windows.sh ${sha} ${branch:-v0.6.0} &> logs/${branch:-v0.6.0}_${sha:0:7}_windows_${now}.log &
 
 wait

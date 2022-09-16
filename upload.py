@@ -27,15 +27,19 @@ def upload(s3, filter=None):
         yield bfn, "https://s3.amazonaws.com/" + os.environ.get('AWS_UPLOAD_BUCKET') + "/" + bfn
         
 def getpkg(tup):
-    if tup[0] == "ifcblender": return "Blender py%s" % tup[2]
-    elif tup[1] == "python": return "Python %s" %  tup[2]
+    def fix310(s):
+        if s == "31":
+            return "310"
+        return s
+    if tup[0] == "ifcblender": return "Blender py%s" % fix310(tup[2])
+    elif tup[1] == "python": return "Python %s" % fix310(tup[2])
     else: return tup[0]
     
 def getos(incl_bit=True):
     def getos_(tup):
         f = os.path.splitext(tup[-1])[0]
         a,b = f[:-2], f[-2:]
-        o = {'macos': 'macOS', 'osx': 'macOS'}.get(a.lower(), a.title())
+        o = {'macos': 'macOS', 'osx': 'macOS', 'osxm1': 'macOS M1', 'macosm1': 'macOS M1'}.get(a.lower(), a.title())
         if incl_bit:
             return "{} {}".format(o, b)
         else:
@@ -71,6 +75,36 @@ GITHUB_USERNAME = os.environ.get('GIT_USER')
 GITHUB_TOKEN = os.environ.get('GIT_PASS')
 
 REPO = (GITHUB_USERNAME, 'IfcOpenShell')
+
+def get_contributors():
+    import os
+    import requests
+
+    endpoint = "https://api.opencollective.com/graphql/v2"
+
+    query = """query project($slug: String) {
+      project(slug: $slug) {
+        name
+        slug
+        parentAccount {
+          slug
+        }
+        members(role: BACKER) {
+          totalCount
+          nodes {
+            account {
+              name
+            }
+          }
+        }
+      }
+    }"""
+
+    D = requests.post(endpoint, json={'query': query, 'variables': {'slug': 'apple-m1-build-server'}}, headers={"Api-Key": os.environ["OPENCOLLECTIVE_APIKEY"]}).json()
+
+    return "Apple M1 builds thanks to: " + ", ".join([n['account']['name'] for n in D['data']['project']['members']['nodes']]) + \
+    "\n\n Support us on [Open Collective](https://opencollective.com/opensourcebim)"
+
     
 g = github3.login(GITHUB_USERNAME, GITHUB_TOKEN)
 repository = g.repository(*REPO)
@@ -80,6 +114,8 @@ I've created the following builds for your {item}:
 
 {builds}
 
+{thanks}
+
 Kind regards,
 IfcOpenBot
 """
@@ -87,9 +123,18 @@ IfcOpenBot
 def main(sha):
     filepairs = list(upload(s3, sha[0:7]))
     builds = table(filepairs)
+
+    try:
+        thanks = get_contributors()
+    except:
+        import traceback
+        traceback.print_exc()
+        thanks = ""
+        
     body=comment_body.format(
         item="commit",
-        builds=builds
+        builds=builds,
+        thanks=thanks
     )
     repository.create_comment(sha=sha, body=body)
     

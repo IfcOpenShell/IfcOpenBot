@@ -49,23 +49,23 @@ done
 
 # temporary
 # ls /c/Python/$BIT | sort | while read py_version; do
-ls /c/Python/$BIT | sort | tail -n 3 | while read py_version; do
-
-    [ -d /c/Python/$BIT/$py_version/Lib/site-packages/ifcopenshell ] || break
-
-    [ -d ~/blender ] && rm -rf ~/blender
-    mkdir ~/blender
-    cd ~/blender
-    
-    numbers=`echo $py_version | sed s/[^0-9]//g`
-    py_version_major=python-${numbers:0:2}
-    
-    cp -R ~/IfcOpenShell_$BIT/src/ifcblender/io_import_scene_ifc .
-    cp -R /c/Python/$BIT/$py_version/Lib/site-packages/ifcopenshell io_import_scene_ifc
-    7z a ifcblender-${py_version_major}-${branch}-${SHA:0:7}-${OS}${BIT}.zip io_import_scene_ifc
-    
-    mv *.zip ~/output
-
-done 
+# ls /c/Python/$BIT | sort | tail -n 3 | while read py_version; do
+# 
+#     [ -d /c/Python/$BIT/$py_version/Lib/site-packages/ifcopenshell ] || break
+# 
+#     [ -d ~/blender ] && rm -rf ~/blender
+#     mkdir ~/blender
+#     cd ~/blender
+#     
+#     numbers=`echo $py_version | sed s/[^0-9]//g`
+#     py_version_major=python-${numbers:0:2}
+#     
+#     cp -R ~/IfcOpenShell_$BIT/src/ifcblender/io_import_scene_ifc .
+#     cp -R /c/Python/$BIT/$py_version/Lib/site-packages/ifcopenshell io_import_scene_ifc
+#     7z a ifcblender-${py_version_major}-${branch}-${SHA:0:7}-${OS}${BIT}.zip io_import_scene_ifc
+#     
+#     mv *.zip ~/output
+# 
+# done 
 
 done # for BIT ...

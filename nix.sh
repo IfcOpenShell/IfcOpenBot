@@ -11,7 +11,13 @@ if [ "$3" == "v0.7.0" ]; then
 DARWIN_C_SOURCE=-D_DARWIN_C_SOURCE
 fi
 
-SSH_HOST=${OSX_SSH_HOST}
+if [ ! -z "$ARCH" ]
+then
+ARCH_POSTFIX=_${ARCH^^}
+fi
+
+h=OSX${ARCH_POSTFIX}_SSH_HOST
+SSH_HOST=${!h}
 SSH="ssh -o StrictHostKeyChecking=no -i ${KEY_FILE}.pem ${SSH_HOST} /bin/bash --login"
 
 else
@@ -158,7 +164,7 @@ ls -d python-* | while read py_version; do
     fi
     [ -d ifcopenshell/__pycache__ ] && rm -rf ifcopenshell/__pycache__
     find ifcopenshell -name "*.pyc" -delete
-    zip -r -qq ifcopenshell-${py_version_major}-${branch}-${SHA:0:7}-${OS}${BIT}.zip ifcopenshell/*
+    zip -r -qq ifcopenshell-${py_version_major}-${branch}-${SHA:0:7}-${OS}'$ARCH'${BIT}.zip ifcopenshell/*
     mv *.zip ~/output
     popd > /dev/null
 done
@@ -166,30 +172,31 @@ done
 cd bin
 rm *.zip || true
 ls | while read exe; do
-    zip -qq -r ${exe}-${branch}-${SHA:0:7}-${OS}${BIT}.zip $exe
+    zip -qq -r ${exe}-${branch}-${SHA:0:7}-${OS}'$ARCH'${BIT}.zip $exe
 done
 mv *.zip ~/output
 cd ..
 
 # Assume latest python version is used in Blender
-
-ls -d python-* | sort | tail -n 3 | while read py_version; do
-
-postfix=`echo ${py_version: -1} | sed s/[0-9]//`
-numbers=`echo $py_version | sed s/[^0-9]//g`
-py_version_major=python-${numbers:0:2}$postfix
-[ -d blender ] && rm -rf blender
-mkdir blender
-cd blender
-cp -R ~/$rootdir/src/ifcblender/io_import_scene_ifc .
-cp -R ../$py_version/ifcopenshell io_import_scene_ifc
-rm *.zip || true
-zip -r -qq ifcblender-${py_version_major}-${branch}-${SHA:0:7}-${OS}${BIT}.zip io_import_scene_ifc
-mv *.zip ~/output
-cd ..
-rm -rf blender
-
-done
+# We dont publish ifcblender anymore
+# 
+# ls -d python-* | sort | tail -n 3 | while read py_version; do
+# 
+# postfix=`echo ${py_version: -1} | sed s/[0-9]//`
+# numbers=`echo $py_version | sed s/[^0-9]//g`
+# py_version_major=python-${numbers:0:2}$postfix
+# [ -d blender ] && rm -rf blender
+# mkdir blender
+# cd blender
+# cp -R ~/$rootdir/src/ifcblender/io_import_scene_ifc .
+# cp -R ../$py_version/ifcopenshell io_import_scene_ifc
+# rm *.zip || true
+# zip -r -qq ifcblender-${py_version_major}-${branch}-${SHA:0:7}-${OS}'$ARCH'${BIT}.zip io_import_scene_ifc
+# mv *.zip ~/output
+# cd ..
+# rm -rf blender
+# 
+# done
 
 ' $2 $3 | $SSH
 
