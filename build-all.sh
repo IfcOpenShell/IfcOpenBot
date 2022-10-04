@@ -1,5 +1,15 @@
 source ./secrets.sh
 
+if [ `aws ec2 describe-images --image-ids ${WINDOWS_AMI} | jq '.Images | length'` == "0" ]; then
+echo "Windows AMI ${WINDOWS_AMI} not available"
+exit 1
+fi
+
+if [ `aws ec2 describe-images --image-ids ${WINDOWS_AMI} | jq '.Images | length'` == "0" ]; then
+echo "Linux AMI ${LINUX_AMI} not available"
+exit 1
+fi
+
 mkdir -p logs output uploaded
 
 sha=$(./sync.sh)
