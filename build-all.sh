@@ -5,7 +5,7 @@ echo "Windows AMI ${WINDOWS_AMI} not available"
 exit 1
 fi
 
-if [ `aws ec2 describe-images --image-ids ${WINDOWS_AMI} | jq '.Images | length'` == "0" ]; then
+if [ `aws ec2 describe-images --image-ids ${LINUX_AMI} | jq '.Images | length'` == "0" ]; then
 echo "Linux AMI ${LINUX_AMI} not available"
 exit 1
 fi
