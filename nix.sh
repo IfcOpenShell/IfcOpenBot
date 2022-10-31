@@ -153,8 +153,8 @@ cd ~/$rootdir/build/`uname`/*/${OSX_PLATFORM}install/ifcopenshell
 
 ls -d python-* | while read py_version; do
     postfix=`echo ${py_version: -1} | sed s/[0-9]//`
-    numbers=`echo $py_version | sed s/[^0-9]//g`
-    py_version_major=python-${numbers:0:2}$postfix
+    numbers=`echo $py_version | grep -oE '[0-9]+\.[0-9]+' | tr -d '.'`
+    py_version_major=python-${numbers}$postfix
     pushd . > /dev/null
     cd $py_version
     if [ ! -d ifcopenshell ]; then
