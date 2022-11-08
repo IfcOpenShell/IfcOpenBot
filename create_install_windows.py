@@ -13,7 +13,7 @@ $file = "$env:temp\ConfigureRemotingForAnsible.ps1"
 powershell.exe -ExecutionPolicy ByPass -File $file
 """)
 
-for v in ["3.6.8", "3.7.9", "3.8.6", "3.9.1", "3.10.0"]:
+for v in ["3.6.8", "3.7.9", "3.8.6", "3.9.1", "3.10.0", "3.11.0"]:
 
     for bit in ["32", "64"]:
         if tuple(map(int, v.split("."))) < (3,5):
