@@ -17,7 +17,7 @@ now=$(date +%Y-%m-%d_%H.%M.%S)
 
 #@todo catching all exit codes is tedious have the build script write to some file at the end to verify success?
 
-if [ "$branch" != "v0.7.0" ]; then
+if [[ "$branch" != "v0.7.0" && "$branch" != "v0.8.0" ]]; then
 ./nix.sh 32 ${sha} ${branch:-v0.6.0} &> logs/${branch:-v0.6.0}_${sha:0:7}_linux_32_${now}.log &
 fi
 

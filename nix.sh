@@ -2,12 +2,12 @@ set -ex
 
 if ! [[ "$1" =~ ^(32|64|osx)$ ]]; then exit 1 ; fi
 if [ ${#2} -ne 40 ]; then exit 1; fi
-if ! [[ "$3" =~ ^v0.(6|7).0$ ]]; then exit 1 ; fi
+if ! [[ "$3" =~ ^v0.(6|7|8).0$ ]]; then exit 1 ; fi
 
 if [ $1 == osx ]; then
 
 # necessary for the zlib compilation in hdf5 apparently
-if [ "$3" == "v0.7.0" ]; then
+if [[ "$3" == "v0.7.0" || "$3" == "v0.8.0" ]]; then
 DARWIN_C_SOURCE=-D_DARWIN_C_SOURCE
 fi
 
@@ -109,7 +109,7 @@ COMMIT_SHA=%s
 branch=%s
 
 rootdir=IfcOpenShell
-if [ "$branch" == "v0.7.0" ]; then
+if [[ "$branch" == "v0.7.0" || "$branch" == "v0.8.0" ]]; then
 rootdir=IfcOpenShell_$branch
 fi
 
@@ -135,7 +135,7 @@ SHA=%s
 branch=%s
 
 rootdir=IfcOpenShell
-if [ "$branch" == "v0.7.0" ]; then
+if [[ "$branch" == "v0.7.0" || "$branch" == "v0.8.0" ]]; then
 rootdir=IfcOpenShell_$branch
 fi
 
