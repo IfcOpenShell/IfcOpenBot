@@ -37,10 +37,10 @@ ls /c/Python/$BIT | while read py_version; do
     numbers=`echo $py_version | grep -oE '[0-9]+\.[0-9]+' | tr -d '.'`
     py_version_major=python-${numbers}
     cd /c/Python/$BIT/$py_version/Lib/site-packages 
-    
-    # temporary...
-    # [ -d ifcopenshell ] || break
-    
+
+    # might install more python versions then actually being compiled for...
+    [ -d ifcopenshell ] || continue
+
     [ -d ifcopenshell/__pycache__ ] && rm -rf ifcopenshell/__pycache__
     find ifcopenshell -name "*.pyc" -delete
     7z a ifcopenshell-${py_version_major}-${branch}-${SHA:0:7}-${OS}${BIT}.zip ifcopenshell
