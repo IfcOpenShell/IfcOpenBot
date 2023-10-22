@@ -123,6 +123,7 @@ git reset --hard
 [ -f ~/patch.patch ] && git apply ~/patch.patch
 git fetch
 git checkout $COMMIT_SHA
+git submodule update --init --recursive
 
 ADD_COMMIT_SHA=1 BUILD_CFG=Release CFLAGS="-O3 '${DARWIN_C_SOURCE}'" CXXFLAGS="-O3" '${TARGET_ARCH}' python3 build-all.py
 
