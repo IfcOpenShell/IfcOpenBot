@@ -13,7 +13,7 @@ $file = "$env:temp\ConfigureRemotingForAnsible.ps1"
 powershell.exe -ExecutionPolicy ByPass -File $file
 """)
 
-PYV = ["3.6.8", "3.7.9", "3.8.10", "3.9.13", "3.10.10", "3.11.7", "3.12.1"]
+PYV = ["3.7.9", "3.8.10", "3.9.13", "3.10.10", "3.11.7", "3.12.1"]
 
 for v in PYV:
 
