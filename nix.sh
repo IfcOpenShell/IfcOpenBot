@@ -116,7 +116,7 @@ fi
 OSX_PLATFORM=
 test "`uname`" = "Darwin" && OSX_PLATFORM=10.9/
 
-rm -rf ~/$rootdir/build/`uname`/`python3 -c 'import platform; print(platform.machine())'`/${OSX_PLATFORM}install/ifcopenshell | true
+rm -rf ~/$rootdir/build/`uname`/`python3 -c "import platform; print(platform.machine())"`/${OSX_PLATFORM}install/ifcopenshell | true
 
 export CXXFLAGS="-O3"
 export CFLAGS="-O3"
