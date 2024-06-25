@@ -124,7 +124,7 @@ git submodule update --init --recursive
 
 ADD_COMMIT_SHA=1 BUILD_CFG=Release CFLAGS="-O3 '${DARWIN_C_SOURCE}'" CXXFLAGS="-O3" '${TARGET_ARCH}' python3 build-all.py
 
-' $2 $3 $4 | $SSH
+' $2 $3 | $SSH
 
 printf '
 set -ex
