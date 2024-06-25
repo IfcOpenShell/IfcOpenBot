@@ -28,5 +28,5 @@ for b, a, p in zip(BIT, ARCH, ARCH2):
     
         print(fr"set PYTHONHOME=C:\Python\{b}\{py}")
         print(fr"set PY_VER_MAJOR_MINOR={py2}")
-        print(fr"call run-cmake.bat vs2017-{a} -DENABLE_BUILD_OPTIMIZATIONS=On -DGLTF_SUPPORT=ON -DADD_COMMIT_SHA=ON")
+        print(fr"call run-cmake.bat vs2017-{a} -DENABLE_BUILD_OPTIMIZATIONS=On -DGLTF_SUPPORT=ON -DADD_COMMIT_SHA=ON -DVERSION_OVERRIDE=ON")
         print(fr"call install-ifcopenshell.bat vs2017-{a} Release")
