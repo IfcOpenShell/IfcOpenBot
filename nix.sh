@@ -22,8 +22,6 @@ SSH="ssh -o StrictHostKeyChecking=no -i ${KEY_FILE}.pem ${SSH_HOST} /bin/bash --
 
 else
 
-if [ -z "$4" ]; then
-
 INSTANCE_ID=$(aws ec2 run-instances \
 	--region us-east-2 \
 	--image-id ${LINUX_AMI} \
@@ -36,12 +34,6 @@ INSTANCE_ID=$(aws ec2 run-instances \
 	| jq --raw-output .Instances[].InstanceId)
 
 echo INSTANCE_ID ${INSTANCE_ID}
-
-else
-
-INSTANCE_ID=$4
-
-fi
 
 while :
 do

@@ -1,7 +1,5 @@
 set -ex
 
-if [ -z "$3" ]; then
-
 python3 create_install_windows.py > windows_init.txt
 
 INSTANCE_ID=$(aws ec2 run-instances \
@@ -26,12 +24,6 @@ aws ec2 modify-instance-attribute \
 	--instance-id "$INSTANCE_ID" \
         --instance-type "{\"Value\":\"t3.2xlarge\"}"
 aws ec2 start-instances --instance-ids "$INSTANCE_ID"
-
-else
-
-INSTANCE_ID=$3
-
-fi
 
 while :
 do
