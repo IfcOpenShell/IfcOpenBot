@@ -18,7 +18,7 @@
       
     - name: collect output
       script:
-        cmd: collect.sh {{ sha }} {{ branch }}
+        cmd: collect.sh {{ sha }} {{ branch }} {{ override }}
         executable: '"C:\Program Files\Git\bin\bash.exe"'
         
     - name: bundle output

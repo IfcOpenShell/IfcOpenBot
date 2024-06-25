@@ -12,22 +12,28 @@ fi
 
 mkdir -p logs output uploaded
 
-sha=$(./sync.sh)
+mapfile -t sha_version < <(./sync.sh)
+sha=${sha_version[0]}
+if [ "${#sha_version[@]}" == 2 ]; then
+override="v${sha_version[1]}"
+else
+override=${branch:-v0.6.0}
+fi
 now=$(date +%Y-%m-%d_%H.%M.%S)
 
 #@todo catching all exit codes is tedious have the build script write to some file at the end to verify success?
 
 if [[ "$branch" != "v0.7.0" && "$branch" != "v0.8.0" ]]; then
-./nix.sh 32 ${sha} ${branch:-v0.6.0} &> logs/${branch:-v0.6.0}_${sha:0:7}_linux_32_${now}.log &
+./nix.sh 32 ${sha} ${branch:-v0.6.0} ${override} &> logs/${branch:-v0.6.0}_${sha:0:7}_linux_32_${now}.log &
 fi
 
-./nix.sh 64 ${sha} ${branch:-v0.6.0} &> logs/${branch:-v0.6.0}_${sha:0:7}_linux_64_${now}.log &
+./nix.sh 64 ${sha} ${branch:-v0.6.0} ${override} &> logs/${branch:-v0.6.0}_${sha:0:7}_linux_64_${now}.log &
 
-./nix.sh osx ${sha} ${branch:-v0.6.0} &> logs/${branch:-v0.6.0}_${sha:0:7}_osx_${now}.log &
+./nix.sh osx ${sha} ${branch:-v0.6.0} ${override} &> logs/${branch:-v0.6.0}_${sha:0:7}_osx_${now}.log &
 
-ARCH=m1 ./nix.sh osx ${sha} ${branch:-v0.6.0} &> logs/${branch:-v0.6.0}_${sha:0:7}_osx_m1_${now}.log &
+ARCH=m1 ./nix.sh osx ${sha} ${branch:-v0.6.0} ${override} &> logs/${branch:-v0.6.0}_${sha:0:7}_osx_m1_${now}.log &
 
-./windows.sh ${sha} ${branch:-v0.6.0} &> logs/${branch:-v0.6.0}_${sha:0:7}_windows_${now}.log &
+./windows.sh ${sha} ${branch:-v0.6.0} ${override} &> logs/${branch:-v0.6.0}_${sha:0:7}_windows_${now}.log &
 
 wait
 

@@ -77,7 +77,7 @@ sleep 60
 
 while :
 do
-ansible-playbook win.yaml --extra-vars "ip=${IP} pass=${PASS} sha=$1 branch=$2" -vvv || true
+ansible-playbook win.yaml --extra-vars "ip=${IP} pass=${PASS} sha=$1 branch=$2 override=$3" -vvv || true
 if [ -f output/bundle.zip ]; then
     break
 fi

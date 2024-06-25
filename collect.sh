@@ -14,6 +14,7 @@ cd ~/IfcOpenShell_$BIT
 
 SHA=$1
 branch=$2
+override=$3
 
 ARCH=amd64
 PY_ARCH=$ARCH
@@ -29,7 +30,7 @@ fi
 
 cd _installed-vs2017-$INSTALL_ARCH/bin
 ls | while read exe; do
-    7z a ${exe:0: -4}-${branch}-${SHA:0:7}-${OS}${BIT}.zip $exe
+    7z a ${exe:0: -4}-${override}-${SHA:0:7}-${OS}${BIT}.zip $exe
 done
 mv *.zip ~/output
 
@@ -43,7 +44,7 @@ ls /c/Python/$BIT | while read py_version; do
 
     [ -d ifcopenshell/__pycache__ ] && rm -rf ifcopenshell/__pycache__
     find ifcopenshell -name "*.pyc" -delete
-    7z a ifcopenshell-${py_version_major}-${branch}-${SHA:0:7}-${OS}${BIT}.zip ifcopenshell
+    7z a ifcopenshell-${py_version_major}-${override}-${SHA:0:7}-${OS}${BIT}.zip ifcopenshell
     mv *.zip ~/output
 done
 

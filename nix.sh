@@ -132,13 +132,14 @@ git submodule update --init --recursive
 
 ADD_COMMIT_SHA=1 BUILD_CFG=Release CFLAGS="-O3 '${DARWIN_C_SOURCE}'" CXXFLAGS="-O3" '${TARGET_ARCH}' python3 build-all.py
 
-' $2 $3 | $SSH
+' $2 $3 $4 | $SSH
 
 printf '
 set -ex
 
 SHA=%s
 branch=%s
+override=%s
 
 rootdir=IfcOpenShell
 if [[ "$branch" == "v0.7.0" || "$branch" == "v0.8.0" ]]; then
@@ -170,7 +171,7 @@ ls -d python-* | while read py_version; do
     fi
     [ -d ifcopenshell/__pycache__ ] && rm -rf ifcopenshell/__pycache__
     find ifcopenshell -name "*.pyc" -delete
-    zip -r -qq ifcopenshell-${py_version_major}-${branch}-${SHA:0:7}-${OS}'$ARCH'${BIT}.zip ifcopenshell/*
+    zip -r -qq ifcopenshell-${py_version_major}-${override}-${SHA:0:7}-${OS}'$ARCH'${BIT}.zip ifcopenshell/*
     mv *.zip ~/output
     popd > /dev/null
 done
@@ -178,7 +179,7 @@ done
 cd bin
 rm *.zip || true
 ls | while read exe; do
-    zip -qq -r ${exe}-${branch}-${SHA:0:7}-${OS}'$ARCH'${BIT}.zip $exe
+    zip -qq -r ${exe}-${override}-${SHA:0:7}-${OS}'$ARCH'${BIT}.zip $exe
 done
 mv *.zip ~/output
 cd ..
@@ -204,7 +205,7 @@ cd ..
 # 
 # done
 
-' $2 $3 | $SSH
+' $2 $3 $4 | $SSH
 
 outputdir=output$(basename -- "$5")
 mkdir -p "$outputdir"
