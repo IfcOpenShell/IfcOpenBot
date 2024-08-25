@@ -28,7 +28,7 @@ CMAKE_ARCH=$ARCH
 INSTALL_ARCH=Win32
 fi
 
-cd _installed-vs2017-$INSTALL_ARCH/bin
+cd _installed-vs2019-$INSTALL_ARCH/bin
 ls | while read exe; do
     7z a ${exe:0: -4}-${override}-${SHA:0:7}-${OS}${BIT}.zip $exe
 done

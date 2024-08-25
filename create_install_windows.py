@@ -3,7 +3,7 @@ print("""<powershell>
 iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex
 choco install -y git sed 7zip.install
 choco install -y cmake.install --installargs '"ADD_CMAKE_TO_PATH=System"'
-choco install visualstudio2017buildtools -y --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive" --execution-timeout 7200
+choco install visualstudio2019buildtools -y --package-parameters "--allWorkloads --includeRecommended --includeOptional --passive" --execution-timeout 7200
 
 $url = "https://raw.githubusercontent.com/ansible/ansible/stable-2.12/examples/scripts/ConfigureRemotingForAnsible.ps1"
 $file = "$env:temp\ConfigureRemotingForAnsible.ps1"
