@@ -72,7 +72,7 @@ test -x `command -v apt-get` && sudo update-ca-certificates
 
 # binaries
 test -x `command -v apt-get` && sudo apt-get install -y gcc g++     git autoconf bison make zip cmake python3
-test -x `command -v yum` && sudo yum install -y         gcc gcc-c++ git autoconf bison make zip cmake python3
+test -x `command -v yum` && sudo yum install -y         gcc gcc-c++ git autoconf bison make zip cmake python3 bzip2
 
 # ifcopenshell dependencies
 test -x `command -v apt-get` && sudo apt-get install -y libc6-dev\${arch} libfreetype6-dev\${arch} mesa-common-dev\${arch} libffi-dev\${arch} libfontconfig1-dev\${arch}
