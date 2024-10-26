@@ -2,6 +2,7 @@ export GIT_USER=
 export GIT_PASS=
 export LINUX_AMI=
 export LINUX_SGROUP=
+export LINUX_USERNAME=
 export WINDOWS_AMI=
 export WINDOWS_SGROUP=
 export KEY_FILE=

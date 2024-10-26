@@ -50,7 +50,7 @@ echo "IP"
 IP=$(aws ec2 describe-instances --filters Name=instance-id,Values=${INSTANCE_ID} | jq --raw-output .Reservations[].Instances[].PublicIpAddress)
 echo ${IP}
 
-SSH_HOST=ubuntu@${IP}
+SSH_HOST=${LINUX_USERNAME}@${IP}
 SSH="ssh -o StrictHostKeyChecking=no -i ${KEY_FILE}.pem ${SSH_HOST} /bin/bash --login"
 
 printf "
@@ -60,26 +60,29 @@ if [ \"$1\" == \"32\" ]; then
 arch=:i386
 sudo dpkg --add-architecture i386
 sudo apt-get update && sudo apt-get install -y gcc-multilib g++-multilib
-else
-sudo apt-get update && sudo apt-get install -y gcc g++
 fi
 
+test -x `command -v apt-get` && sudo apt-get update
+test -x `command -v yum` &&     sudo yum     update -y
+
 # cert stuff (lets encrypt cert for occt?)
-sudo apt-get update
-sudo apt-get upgrade -y
-sudo apt-get install -y --reinstall ca-certificates
-sudo update-ca-certificates
+test -x `command -v apt-get` && sudo apt-get upgrade -y
+test -x `command -v apt-get` && sudo apt-get install -y --reinstall ca-certificates
+test -x `command -v apt-get` && sudo update-ca-certificates
 
 # binaries
-sudo apt-get install -y git autoconf bison make zip cmake python3
+test -x `command -v apt-get` && sudo apt-get install -y gcc g++     git autoconf bison make zip cmake python3
+test -x `command -v yum` && sudo yum install -y         gcc gcc-c++ git autoconf bison make zip cmake python3
 
 # ifcopenshell dependencies
-sudo apt-get install -y libc6-dev\${arch} libfreetype6-dev\${arch} mesa-common-dev\${arch} libffi-dev\${arch} libfontconfig1-dev\${arch}
+test -x `command -v apt-get` && sudo apt-get install -y libc6-dev\${arch} libfreetype6-dev\${arch} mesa-common-dev\${arch} libffi-dev\${arch} libfontconfig1-dev\${arch}
+test -x `command -v yum` && sudo yum install -y                                                    mesa-libGL-devel        libffi-devel       fontconfig-devel
 
 # python dependencies
-sudo apt-get install -y libsqlite3-dev\${arch} libbz2-dev\${arch} zlib1g-dev\${arch} libssl-dev\${arch} liblzma-dev\${arch}
-sudo apt-get install -y libreadline-dev\${arch} libncursesw5-dev\${arch} libffi-dev\${arch} uuid-dev\${arch}
-
+test -x `command -v apt-get` && sudo apt-get install -y libsqlite3-dev\${arch} libbz2-dev\${arch} zlib1g-dev\${arch} libssl-dev\${arch} liblzma-dev\${arch}
+test -x `command -v yum` && sudo yum install -y         sqlite-devel           bzip2-devel        zlib-devel         openssl-devel      xz-devel
+test -x `command -v apt-get` && sudo apt-get install -y libreadline-dev\${arch} libncursesw5-dev\${arch} libffi-dev\${arch} uuid-dev\${arch}
+test -x `command -v yum` && sudo yum install -y         readline-devel          ncurses-devel            libffi-devel       libuuid-devel
 " | $SSH
 
 fi
